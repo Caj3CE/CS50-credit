@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <cs50.h>
+
+//functions used are define at the end/
+void printspace(int n);
+void printdiez(int n);
+
+//main program//
+int main(void)
+{
+    int n;
+    do //ask value as long as it is positive integer strictly inferior to 9
+    {
+        n = get_int("height: ");
+    }
+    while ((n < 1) || (n > 8));
+
+    for (int i = 0; i < n; i++)
+    {
+        printspace(n - (i + 1));
+        printdiez(i + 1);
+        printspace(2);
+        printdiez(i + 1);
+        printf("\n");
+    };
+}
+
+//function to make spaces
+void printspace(int n)
+{
+    for (int j = 0; j < n; j++)
+    {
+        printf(" ");
+    }
+}
+
+// function to add bricks
+void printdiez(int n)
+{
+    for (int j = 0; j < n; j++)
+    {
+        printf("#");
+    }
+}

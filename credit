@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <cs50.h>
+
+// functions are at the end //
+int findlength(long m);
+int checksum(long number, int length);
+int isitmastercard(int length, long number);
+int isitamex(int length, long number);
+int isitvisa(int length, long number);
+
+
+int main(void)
+{
+    long number = get_long("Number: ");
+    int length = findlength(number);
+    int check = checksum(number, length);
+    if (check == 0)
+    {
+        int mastercard = isitmastercard(length, number);
+        int amex = isitamex(length, number);
+        int visa = isitvisa(length, number);
+        if (mastercard + amex + visa == 0)
+        {
+            printf("INVALID\n");
+        }
+    }
+    else
+    {
+        printf("INVALID\n");
+    }
+}
+
+//find the number of digit in a long number
+int findlength(long m)
+{
+    int length = 0;
+    do
+    {
+        m = m / 10;
+        length++;
+    }
+    while (m != 0) ;
+//    printf("%i\n",length);
+    return length;
+}
+
+//Luhn's algorithm
+int checksum(long number, int length)
+{
+    int sum1 = 0;
+    int sum2 = 0;
+    for (int i = 0; i < length + 1 ; i++)
+    {
+        int number1 = number % 10; //give the last number
+        number = number / 10;
+        if (i % 2 != 0) //if i is odd, then ...
+        {
+            long number2 = number1 * 2;
+            do //add numbers from products
+            {
+                int mod = number2 % 10;
+                sum1 = sum1 + mod;
+                number2 = number2 / 10;
+            }
+            while (number2 != 0);
+        }
+        else // if i is not odd (i.e. i is even or =0) then ...
+        {
+            sum2 = sum2 + number1;
+        }
+    }
+    int total = sum1 + sum2;
+//    printf("%i\n",total % 10);
+//    printf("%i\n",total);
+    return total % 10;
+}
+
+//check if all conditions required for mastercard are met
+int isitmastercard(int length, long number)
+{
+    int try = number / 100000000000000;
+    if ((try> 50) && (try < 56) && (length == 16))
+    {
+        printf("MASTERCARD\n");
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//check if all conditions required for amex are met
+int isitamex(int length, long number)
+{
+    int try = number / 10000000000000;
+    if (((try == 34) || (try == 37)) && (length == 15))
+    {
+        printf("AMEX\n");
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+//check if all conditions required for visa are met
+int isitvisa(int length, long number)
+{
+    int try = 0;
+    if (length == 13)
+    {
+        try = number / 1000000000000;
+    }
+    else if (length == 16)
+    {
+        try = number / 1000000000000000;
+    }
+
+    if (try == 4)
+    {
+        printf("VISA\n");
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
